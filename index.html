@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SWISS 7N8D | 스위스 7박 8일 상세 여행 타임라인</title>
+  <meta name="description" content="스위스 7박 8일 알프스 렌터카 & 트레킹 상세 스케줄 모바일 타임라인 웹앱. 실시간 일정 체크, 네비게이션 주소 복사, 웹캠, 요금 계산 팁 제공.">
+  <meta name="theme-color" content="#0d1b2a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Mobile App Wrapper -->
+  <div class="mobile-container">
+
+    <!-- Top Navigation Bar -->
+    <header class="app-header">
+      <div class="header-brand">
+        <span class="swiss-flag"></span>
+        <span class="brand-text">SWISS <span>7N8D</span></span>
+      </div>
+      <div class="header-actions">
+        <span class="cloud-sync-badge" id="cloudSyncBadge" title="Firestore 연동 상태">☁️ Cloud</span>
+        <div class="header-dual-pill" title="스위스 & 한국 현지 시각">
+          <span>🇨🇭 <strong id="headerSwissTime">--:--</strong></span>
+          <span class="pill-divider">|</span>
+          <span>🇰🇷 <strong id="headerKoreaTime">--:--</strong></span>
+        </div>
+        <button class="icon-btn" id="btnOpenMenu" aria-label="메뉴 열기">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Hero Section (Reference Aesthetic: Matterhorn) -->
+    <section class="hero-section">
+      <div class="hero-bg-overlay"></div>
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        <span>2026.09.05 ~ 09.12 (7박 8일)</span>
+      </div>
+      <h1 class="hero-title">
+        스위스 <span class="gradient-text">가족 여행</span>
+      </h1>
+
+      <!-- Dual Real-time Clock Widget (Swiss & Korea Date & Time) -->
+      <div class="dual-time-container">
+        <div class="time-box swiss-box">
+          <div class="time-box-header">
+            <span class="flag-icon">🇨🇭</span>
+            <span class="time-box-title">스위스 현지시각</span>
+          </div>
+          <div class="time-box-date" id="swissDateText">--월 --일 (요일)</div>
+          <div class="time-box-clock" id="swissClockText">--:--:--</div>
+        </div>
+        <div class="time-box-divider"></div>
+        <div class="time-box korea-box">
+          <div class="time-box-header">
+            <span class="flag-icon">🇰🇷</span>
+            <span class="time-box-title">한국 표준시</span>
+          </div>
+          <div class="time-box-date" id="koreaDateText">--월 --일 (요일)</div>
+          <div class="time-box-clock" id="koreaClockText">--:--:--</div>
+        </div>
+      </div>
+
+      <!-- Interactive Swiss Destination Weather & Temperature Widget -->
+      <div class="weather-widget-card">
+        <div class="weather-widget-top">
+          <div class="weather-selector-wrap">
+            <span class="weather-pin-icon">📍</span>
+            <select id="weatherLocationSelect" class="weather-select" aria-label="여행 장소 날씨 선택">
+              <option value="grindelwald" selected>🇨🇭 그린델발트 (베이스캠프 1,034m)</option>
+              <option value="zermatt">🏔️ 체르마트·마테호른 (1,620m)</option>
+              <option value="first">🚡 피르스트 정상 (2,168m)</option>
+              <option value="interlaken">🌲 인터라켄·하더쿨름 (568m)</option>
+              <option value="schynige">🚂 쉬니케 플라테 (2,076m)</option>
+              <option value="mannlichen">👑 멘리헨 왕관 (2,230m)</option>
+              <option value="montreux">🏰 몽트뢰·시옹 성 (390m)</option>
+              <option value="bern">🏛️ 베른 구시가지 (542m)</option>
+              <option value="zurich">🛫 취리히 공항 (408m)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="weather-display-row">
+          <div class="weather-main-info">
+            <span class="weather-icon-large" id="weatherIcon">⛅</span>
+            <div>
+              <div class="weather-temp-wrap">
+                <span class="weather-temp-val" id="weatherTemp">16°</span>
+                <span class="weather-condition" id="weatherCondition">구름 조금 / 쾌적함</span>
+              </div>
+              <div class="weather-range" id="weatherRange">최저 9°C / 최고 19°C</div>
+            </div>
+          </div>
+          <div class="weather-altitude-badge" id="weatherAltBadge">고도 1,034m</div>
+        </div>
+
+        <div class="weather-tip-strip" id="weatherTipStrip">
+          💡 그린델발트 아침/저녁은 쌀쌀하니 가벼운 외투나 가디건을 준비하세요.
+        </div>
+      </div>
+    </section>
+
+    <!-- Sticky Day Selector Tabs -->
+    <nav class="sticky-tabs-wrapper" id="stickyTabNav">
+      <div class="tabs-scroll-container" id="tabsScroll">
+        <!-- Day 1 to 8 dynamic tabs rendered via JS -->
+      </div>
+    </nav>
+
+    <!-- Main Schedule Content Area -->
+    <main class="content-area">
+
+      <!-- Active Day Header Banner Card -->
+      <section class="active-day-banner" id="activeDayBanner">
+        <!-- Dynamically injected with photo, subtitle, day count, weather/notes -->
+      </section>
+
+      <!-- Filter Chips -->
+      <div class="filter-chips-container">
+        <button class="filter-chip active" data-filter="all">전체</button>
+        <button class="filter-chip" data-filter="move">🚗 이동/교통</button>
+        <button class="filter-chip" data-filter="tour">🏔️ 관광/전망</button>
+        <button class="filter-chip" data-filter="trek">🥾 트레킹</button>
+        <button class="filter-chip" data-filter="eat">🍽️ 식사/장보기</button>
+        <button class="filter-chip" data-filter="tip">💡 꿀팁/비용</button>
+      </div>
+
+      <!-- Timeline Items Container -->
+      <section class="timeline-container" id="timelineContainer">
+        <!-- Timeline cards injected via app.js -->
+      </section>
+
+      <!-- Quick Day Navigation Switcher -->
+      <div class="day-navigation-buttons">
+        <button class="nav-prev-btn" id="btnPrevDay">
+          <span>‹ 이전 날짜</span>
+          <small id="prevDayTitle">Day 0</small>
+        </button>
+        <button class="nav-next-btn" id="btnNextDay">
+          <span>다음 날짜 ›</span>
+          <small id="nextDayTitle">Day 2</small>
+        </button>
+      </div>
+
+      <!-- Trip Key Gallery (Matching Reference "영감을 주는 갤러리") -->
+      <section class="trip-gallery-section">
+        <div class="section-title-wrap">
+          <span class="sub-badge">GALLERY</span>
+          <h2 class="section-title">스위스 여정의 순간들</h2>
+          <p class="section-desc">이번 여행에서 만날 스위스의 숨막히는 대자연</p>
+        </div>
+
+        <div class="gallery-mosaic">
+          <div class="mosaic-item large" style="background-image: url('https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=1000&q=85');">
+            <div class="mosaic-label">
+              <span>체르마트 마테호른</span>
+              <small>슈틸리제 호수 반영</small>
+            </div>
+          </div>
+          <div class="mosaic-item" style="background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80');">
+            <div class="mosaic-label">
+              <span>그린델발트</span>
+              <small>아이거 북벽과 샬레</small>
+            </div>
+          </div>
+          <div class="mosaic-item" style="background-image: url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=600&q=80');">
+            <div class="mosaic-label">
+              <span>이젤발트 & 브리엔츠 호수</span>
+              <small>사랑의 불시착 촬영지</small>
+            </div>
+          </div>
+          <div class="mosaic-item wide" style="background-image: url('https://images.unsplash.com/photo-1527668752968-14dc70a27c95?auto=format&fit=crop&w=1000&q=85');">
+            <div class="mosaic-label">
+              <span>시옹 성 & 레만 호수</span>
+              <small>몽트뢰의 중세 고성</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Useful Travel Guide Accordion -->
+      <section class="useful-info-section">
+        <div class="section-title-wrap">
+          <span class="sub-badge">TRAVEL TIPS</span>
+          <h2 class="section-title">스위스 여행 필수 안내</h2>
+        </div>
+
+        <div class="info-accordion">
+          <!-- Item 1 -->
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span>🛒 Coop / Migros 마트 이용 꿀팁</span>
+              <span class="arrow">▼</span>
+            </button>
+            <div class="accordion-body">
+              <p>• <strong>미그로(Migros)</strong>는 술(맥주, 와인)을 판매하지 않습니다. 맥주를 사려면 반드시 <strong>쿱(Coop)</strong> 또는 Denner로 가셔야 합니다.</p>
+              <p>• 공항 쿱 매장은 밤 10시까지 영업하므로 Day 1 도착 후 물과 생필품을 미리 장보시면 편리합니다.</p>
+              <p>• 추천 장보기 품목: 에비앙 생수, 쿱 로스티(Rösti) 반조리팩, 아펜젤러 치즈, 스위스 초콜릿, 납작복숭아.</p>
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span>🚆 칸데르슈테크 카트레인(Car-Train) 탑승법</span>
+              <span class="arrow">▼</span>
+            </button>
+            <div class="accordion-body">
+              <p>• <strong>운행 구간</strong>: Kandersteg ↔ Goppenstein (BLS 오토페리)</p>
+              <p>• <strong>방법</strong>: 요금소에서 승용차 티켓(편도 약 27~29.5 CHF) 구매 후 기차 위로 차를 직접 운전해 선적합니다. 차량 시동 끄고 차 안에서 약 15분간 터널을 통과하는 이색 체험입니다.</p>
+            </div>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span>🚡 피르스트 & 핑슈텍 요금 및 알뜰 팁</span>
+              <span class="arrow">▼</span>
+            </button>
+            <div class="accordion-body">
+              <p>• <strong>케이블카</strong>: 패밀리카드 소지 시 동반 어린이는 무료 탑승입니다.</p>
+              <p>• <strong>핑슈텍 터보건 꿀팁</strong>: 성인은 1회권(8 CHF) 대신 <strong>6회권(43 CHF)</strong> 1장을 사서 성인 6명이 한 번씩 타고, 아이들은 1회권(2 CHF) x 6회 = 12 CHF로 3번씩 타면 <strong>총 55 CHF</strong>로 알뜰하게 탑승 가능합니다.</p>
+            </div>
+          </div>
+
+          <!-- Item 4 -->
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span>🅿️ 주차장 주소 및 주의사항</span>
+              <span class="arrow">▼</span>
+            </button>
+            <div class="accordion-body">
+              <p>• <strong>태시(Täsch) 주차장</strong>: Matterhorn Terminal Täsch (체르마트 차량 진입 금지 구역이므로 필수 주차 후 셔틀열차 환승)</p>
+              <p>• <strong>베른 시청 주차장</strong>: AMAG Parking AG (Postgasshalde 50, 3011 Bern) - 구시가지 및 장미공원 도보 접근 최고</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bottom Footer -->
+      <footer class="app-footer">
+        <div class="footer-logo">
+          <span class="swiss-flag-small"></span>
+          <span>SWISS 7N8D TRAVEL TIMELINE</span>
+        </div>
+        <p class="footer-copy">스위스 7박 8일 맞춤 타임라인 모바일 가이드<br>즐겁고 안전한 알프스 여행 되세요!</p>
+        <button class="scroll-top-btn" id="btnScrollTop">▲ 맨 위로</button>
+      </footer>
+    </main>
+
+    <!-- Bottom Quick Action Dock (3 Items) -->
+    <nav class="bottom-dock">
+      <button class="dock-item active" id="dockSchedule">
+        <span class="dock-icon">📅</span>
+        <span class="dock-label">일정표</span>
+      </button>
+      <button class="dock-item" id="dockWebcam">
+        <span class="dock-icon">📹</span>
+        <span class="dock-label">실시간 웹캠</span>
+      </button>
+      <button class="dock-item" id="dockCalculator">
+        <span class="dock-icon">💳</span>
+        <span class="dock-label">지출 계산기</span>
+      </button>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div class="toast-message" id="toastMessage">주소가 클립보드에 복사되었습니다.</div>
+
+    <!-- Modal 1: Live Webcams & Weather Modal -->
+    <div class="modal-overlay" id="webcamModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>📹 스위스 실시간 산악 웹캠</h3>
+          <button class="modal-close" id="btnCloseWebcam">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-intro">스위스 산악 전망대는 날씨에 따라 시야가 완전히 달라집니다. 출발 전 실시간 웹캠을 꼭 확인하세요!</p>
+          <div class="webcam-link-list">
+            <a href="https://www.zermatt.ch/en/Webcams" target="_blank" rel="noopener noreferrer" class="webcam-card">
+              <div class="webcam-info">
+                <strong>체르마트 마테호른 (Matterhorn)</strong>
+                <small>수네가, 블라우헤르트, 고르너그라트 라이브</small>
+              </div>
+              <span class="webcam-badge">웹캠 보기 ↗</span>
+            </a>
+            <a href="https://www.jungfrau.ch/en-gb/live-cams/first/" target="_blank" rel="noopener noreferrer" class="webcam-card">
+              <div class="webcam-info">
+                <strong>그린델발트 피르스트 (First)</strong>
+                <small>클리프 워크 & 바흐알프제 하이킹 기상</small>
+              </div>
+              <span class="webcam-badge">웹캠 보기 ↗</span>
+            </a>
+            <a href="https://www.jungfrau.ch/en-gb/live-cams/schynige-platte/" target="_blank" rel="noopener noreferrer" class="webcam-card">
+              <div class="webcam-info">
+                <strong>쉬니케 플라테 (Schynige Platte)</strong>
+                <small>다우베 전망대 & 아이거 3대 봉우리 현황</small>
+              </div>
+              <span class="webcam-badge">웹캠 보기 ↗</span>
+            </a>
+            <a href="https://www.maennlichen.ch/en/live/webcams.html" target="_blank" rel="noopener noreferrer" class="webcam-card">
+              <div class="webcam-info">
+                <strong>멘리헨 (Männlichen)</strong>
+                <small>왕관 전망대 & 33번 트레킹 코스 시야</small>
+              </div>
+              <span class="webcam-badge">웹캠 보기 ↗</span>
+            </a>
+            <a href="https://www.jungfrau.ch/en-gb/live-cams/harder-kulm/" target="_blank" rel="noopener noreferrer" class="webcam-card">
+              <div class="webcam-info">
+                <strong>하더쿨름 (Harder Kulm)</strong>
+                <small>인터라켄 양대 호수 전망대 라이브</small>
+              </div>
+              <span class="webcam-badge">웹캠 보기 ↗</span>
+            </a>
+            <a href="https://www.bern.com/en/detail/webcam-rosengarten" target="_blank" rel="noopener noreferrer" class="webcam-card">
+              <div class="webcam-info">
+                <strong>베른 장미공원 & 구시가지 (Bern)</strong>
+                <small>아레강과 유네스코 구시가지 파노라마</small>
+              </div>
+              <span class="webcam-badge">웹캠 보기 ↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 2: Travel Expense Calculator & Ledger Modal -->
+    <div class="modal-overlay" id="calcModal">
+      <div class="modal-content expense-modal-content">
+        <div class="modal-header">
+          <div class="modal-header-title-wrap">
+            <span class="modal-title-icon">💳</span>
+            <div>
+              <h3>스위스 여행 지출 계산기</h3>
+              <p class="modal-subtitle">실시간 환산 & 공금·개인 원터치 지출 기록</p>
+            </div>
+          </div>
+          <button class="modal-close" id="btnCloseCalc" aria-label="닫기">&times;</button>
+        </div>
+
+        <div class="modal-body expense-modal-body">
+          <!-- 1. 금액 및 통화 (가장 상단, 자동 포커스) -->
+          <div class="expense-field-group">
+            <div class="expense-currency-toggle" id="currencyToggle">
+              <button type="button" class="curr-toggle-btn active" data-curr="CHF">🇨🇭 CHF (프랑)</button>
+              <button type="button" class="curr-toggle-btn" data-curr="KRW">🇰🇷 KRW (원)</button>
+            </div>
+
+            <div class="expense-amount-box">
+              <span class="expense-amount-symbol" id="amountCurrSymbol">CHF</span>
+              <input type="number" 
+                     inputmode="decimal" 
+                     id="expenseAmount" 
+                     class="expense-amount-input" 
+                     placeholder="0.00" 
+                     step="any"
+                     min="0"
+                     autofocus>
+              <button type="button" class="btn-clear-input" id="btnClearAmount" style="display: none;" title="지우기">✕</button>
+            </div>
+
+            <div class="exchange-preview-row">
+              <span class="exchange-rate-badge">실시간 예상 환산</span>
+              <span class="exchange-val" id="exchangeCalcResult">0 원</span>
+              <small class="exchange-rate-desc" id="exchangeRateDesc">(1 CHF ≈ 1,565원 기준)</small>
+            </div>
+          </div>
+
+          <!-- 여행 일자 선택 (Day 1 ~ Day 8) -->
+          <div class="expense-field-group">
+            <div class="field-label-row">
+              <label class="field-label">여행 일자 선택 <small class="text-muted">(선택한 Day로 자동 집계)</small></label>
+              <span class="field-help" id="selectedDayInfoText">Day 1 (9/5 토)</span>
+            </div>
+            <div class="day-select-scroll" id="expenseDaySelector">
+              <button type="button" class="day-select-chip active" data-day="1">Day 1 <small>9/5</small></button>
+              <button type="button" class="day-select-chip" data-day="2">Day 2 <small>9/6</small></button>
+              <button type="button" class="day-select-chip" data-day="3">Day 3 <small>9/7</small></button>
+              <button type="button" class="day-select-chip" data-day="4">Day 4 <small>9/8</small></button>
+              <button type="button" class="day-select-chip" data-day="5">Day 5 <small>9/9</small></button>
+              <button type="button" class="day-select-chip" data-day="6">Day 6 <small>9/10</small></button>
+              <button type="button" class="day-select-chip" data-day="7">Day 7 <small>9/11</small></button>
+              <button type="button" class="day-select-chip" data-day="8">Day 8 <small>9/12</small></button>
+            </div>
+          </div>
+
+          <!-- 2. 카테고리 (아이콘 칩 6구 그리드) -->
+          <div class="expense-field-group">
+            <label class="field-label">카테고리 분류</label>
+            <div class="category-grid" id="categoryGrid">
+              <button type="button" class="cat-chip active" data-cat="food" data-name="식비 / 쿱·마그로">
+                <span class="cat-icon">🍽️</span>
+                <span class="cat-text">식비 / 쿱·마그로</span>
+              </button>
+              <button type="button" class="cat-chip" data-cat="transport" data-name="교통 / 티켓">
+                <span class="cat-icon">🚆</span>
+                <span class="cat-text">교통 / 티켓</span>
+              </button>
+              <button type="button" class="cat-chip" data-cat="activity" data-name="액티비티 / 입장료">
+                <span class="cat-icon">🎟️</span>
+                <span class="cat-text">액티비티 / 입장료</span>
+              </button>
+              <button type="button" class="cat-chip" data-cat="cafe" data-name="카페 / 간식">
+                <span class="cat-icon">☕</span>
+                <span class="cat-text">카페 / 간식</span>
+              </button>
+              <button type="button" class="cat-chip" data-cat="shopping" data-name="쇼핑 / 기념품">
+                <span class="cat-icon">🛍️</span>
+                <span class="cat-text">쇼핑 / 기념품</span>
+              </button>
+              <button type="button" class="cat-chip" data-cat="etc" data-name="기타">
+                <span class="cat-icon">📦</span>
+                <span class="cat-text">기타</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. 결제 수단 및 정산 대상 (토글/세그먼트) -->
+          <div class="expense-dual-grid">
+            <div class="expense-field-group">
+              <label class="field-label">결제 수단</label>
+              <div class="segment-group" id="payMethodGroup">
+                <button type="button" class="seg-btn active" data-pay="card">💳 카드</button>
+                <button type="button" class="seg-btn" data-pay="cash">💵 현금</button>
+              </div>
+            </div>
+            <div class="expense-field-group">
+              <label class="field-label">정산 구분</label>
+              <div class="segment-group" id="settleTargetGroup">
+                <button type="button" class="seg-btn active" data-settle="shared">👥 공금</button>
+                <button type="button" class="seg-btn" data-settle="personal">👤 개인</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. 한 줄 메모 (선택 사항) -->
+          <div class="expense-field-group">
+            <label class="field-label">한 줄 메모 <small class="text-muted">(선택)</small></label>
+            <input type="text" 
+                   id="expenseMemo" 
+                   class="expense-memo-input" 
+                   placeholder="예: 쿱 간식, 융프라우 컵라면" 
+                   maxlength="50">
+          </div>
+
+          <!-- 5. 지출 저장하기 버튼 (한 줄 메모 바로 밑에 위치) -->
+          <div class="expense-submit-box">
+            <button type="button" class="btn-save-expense" id="btnSaveExpense">
+              <span class="btn-save-icon">+</span>
+              <span class="btn-save-text">지출 저장하기</span>
+            </button>
+          </div>
+
+          <!-- 일자별 지출 내역 & 누적 총 합계 대시보드 -->
+          <div class="expense-dashboard-panel">
+            <!-- 1) Day 1 ~ Day 8 일자별 지출 & 누적 합계 리스트 -->
+            <div class="daily-breakdown-section">
+              <div class="section-title-bar">
+                <h4 class="section-title">📅 Day 1 ~ Day 8 일자별 지출 & 누적 현황</h4>
+                <span class="section-hint">터치하여 상세 내역 펼침</span>
+              </div>
+              <div class="daily-cards-container" id="dailyCardsContainer">
+                <!-- Day 1 to Day 8 cards will be dynamically rendered here with running cumulative totals -->
+              </div>
+            </div>
+
+            <!-- 기존 핑슈텍 & 피르스트 요금표 (접이식 아코디언으로 보존) -->
+            <details class="legacy-fare-accordion">
+              <summary class="legacy-fare-summary">
+                <span>📋 Day 4 피르스트 & 핑슈텍 추천 요금표 보기</span>
+                <span class="arrow-icon">▾</span>
+              </summary>
+              <div class="legacy-fare-content">
+                <div class="calc-section">
+                  <h4 class="calc-title">🚠 핑슈텍 케이블카 왕복 요금</h4>
+                  <div class="calc-table">
+                    <div class="calc-row">
+                      <span>성인 (6명)</span>
+                      <span>CHF 16.00 × 6</span>
+                      <strong>CHF 96.00</strong>
+                    </div>
+                    <div class="calc-row free">
+                      <span>어린이 (패밀리카드 소지 시)</span>
+                      <span>무료 적용</span>
+                      <strong>CHF 0.00</strong>
+                    </div>
+                    <div class="calc-total">
+                      <span>케이블카 합계</span>
+                      <span class="highlight">CHF 96.00</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="calc-section">
+                  <h4 class="calc-title">🛷 핑슈텍 터보건(Toboggan) 알뜰 탑승 요금</h4>
+                  <div class="calc-table">
+                    <div class="calc-row">
+                      <span>성인 6회권 (1장으로 성인 6명 1회씩)</span>
+                      <span>단품 8 CHF 대비 할인</span>
+                      <strong>43.00 CHF</strong>
+                    </div>
+                    <div class="calc-row">
+                      <span>어린이 6회 (1인 2 CHF × 6회)</span>
+                      <span>아이들 3번씩 분할 탑승</span>
+                      <strong>12.00 CHF</strong>
+                    </div>
+                    <div class="calc-total">
+                      <span>터보건 탑승 합계</span>
+                      <span class="highlight">55.00 CHF</span>
+                    </div>
+                  </div>
+                  <div class="calc-tip-box">
+                    💡 <strong>알뜰 탑승 꿀팁</strong>: 성인은 1회권(8 CHF x 6 = 48 CHF) 대신 6회권(43 CHF) 1장을 구매하면 5 CHF 절약! 아이들은 1회 2 CHF권으로 유연하게 탈 수 있습니다.
+                  </div>
+                </div>
+              </div>
+            </details>
+
+            <!-- 2) 전체 여행 누적 총 합계 마스터 카드 (페이지 최하단) -->
+            <div class="grand-cumul-card">
+              <div class="grand-cumul-header">
+                <span class="grand-cumul-badge">🇨🇭 7박 8일 전체 여행 총 지출</span>
+                <button type="button" class="btn-clear-history" id="btnClearHistory" title="내역 전체 비우기">전체 초기화</button>
+              </div>
+              <div class="grand-cumul-main">
+                <div class="grand-cumul-label">총 누적 합계 금액</div>
+                <div class="grand-cumul-val" id="grandCumulChf">0.00 CHF</div>
+                <div class="grand-cumul-sub" id="grandCumulKrw">≈ 0원</div>
+              </div>
+              <div class="grand-cumul-split">
+                <div class="split-pill shared">
+                  <span class="split-dot"></span>
+                  <span>공금: <strong id="grandSharedChf">0.00 CHF</strong></span>
+                </div>
+                <div class="split-pill personal">
+                  <span class="split-dot"></span>
+                  <span>개인: <strong id="grandPersonalChf">0.00 CHF</strong></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 3: Side Menu Drawer -->
+    <div class="modal-overlay" id="menuDrawer">
+      <div class="drawer-content">
+        <div class="drawer-header">
+          <div class="drawer-brand">
+            <span class="swiss-flag"></span>
+            <strong>SWISS 7N8D</strong>
+          </div>
+          <button class="modal-close" id="btnCloseMenu">&times;</button>
+        </div>
+        <div class="drawer-body">
+          <div class="drawer-user-card">
+            <div class="drawer-avatar">🇨🇭</div>
+            <div>
+              <strong>스위스 7박 8일 여행 가이드</strong>
+              <p>2026.09.05 ~ 09.12</p>
+            </div>
+          </div>
+          <ul class="drawer-links">
+            <li><a href="#" class="drawer-nav-link" data-day="1">Day 1: 취리히 입국 및 그린델발트 이동</a></li>
+            <li><a href="#" class="drawer-nav-link" data-day="2">Day 2: 인터라켄 하더쿨름 & 이젤발트</a></li>
+            <li><a href="#" class="drawer-nav-link" data-day="3">Day 3: 몽트뢰 시옹 성 & 라보 포도밭</a></li>
+            <li><a href="#" class="drawer-nav-link" data-day="4">Day 4: 그린델발트 피르스트 & 핑슈텍</a></li>
+            <li><a href="#" class="drawer-nav-link" data-day="5">Day 5: 마테호른 & 체르마트 슈틸리제</a></li>
+            <li><a href="#" class="drawer-nav-link" data-day="6">Day 6: 쉬니케 플라테 파노라마</a></li>
+            <li><a href="#" class="drawer-nav-link" data-day="7">Day 7: 멘리헨 33번 트래킹 코스</a></li>
+            <li><a href="#" class="drawer-nav-link" data-day="8">Day 8: 베른 구시가지 & 취리히 출국</a></li>
+          </ul>
+          <hr class="drawer-divider">
+          <div class="drawer-actions-box">
+            <button class="drawer-btn" id="drawerWebcamBtn">📹 라이브 산악 웹캠 보기</button>
+            <button class="drawer-btn" id="drawerCalcBtn">💳 여행 지출 계산기 & 요금표</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- /mobile-container -->
+
+  <!-- Firebase SDK v10 (Compat CDN) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
